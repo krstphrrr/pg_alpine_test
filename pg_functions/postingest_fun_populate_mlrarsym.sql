@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION public_test.postingest_populate_mlra_name(_schema_name text)
--- populates mlra_name field if it exists
+CREATE OR REPLACE FUNCTION public_test.postingest_populate_mlrarsym(_schema_name text)
+-- populates mlrarsym field if it exists
 RETURNS boolean --return true if successful, false if not
  LANGUAGE plpgsql
 AS $function$
@@ -14,13 +14,13 @@ BEGIN
           SELECT FROM information_schema.columns
           WHERE table_schema = ''%I''
             AND table_name = ''geoIndicators''
-            AND column_name = ''mlra_name'')', target_schema) 
+            AND column_name = ''mlrarsym'')', target_schema) 
 	INTO field_exists;
  IF field_exists IS TRUE
  THEN
   EXECUTE format(
     'UPDATE %I."geoIndicators" as target
-   SET mlra_name = src.mlra_name 
+   SET mlrarsym = src.mlrarsym 
    FROM (
       SELECT geo.mlra_name, dh."PrimaryKey", geo.mlrarsym
       FROM gis.mlra_v42_wgs84 as geo 
