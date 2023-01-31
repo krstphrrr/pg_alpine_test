@@ -14,10 +14,7 @@ BEGIN
           SELECT FROM information_schema.columns
           WHERE table_schema = ''%I''
             AND table_name = ''geoIndicators''
-            AND column_name = ''na_l1name''
-            AND column_name = ''na_l2name''
-            AND column_name = ''us_l3name''
-            AND column_name = ''us_l4name'' )', target_schema) 
+            AND column_name in (''na_l1name'', ''na_l2name'', ''us_l3name'', ''us_l4name''))', target_schema) 
 	INTO field_exists;
  IF field_exists IS TRUE
  THEN
