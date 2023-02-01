@@ -35,8 +35,27 @@ BEGIN
         FROM gis.us_eco_level_4 AS geo 
         JOIN %I."dataHeader" AS dh 
         ON ST_WITHIN(dh.wkb_geometry, geo.geom)
-    ) as src
+    ) AS src
    WHERE target."PrimaryKey" = src."PrimaryKey";', target_schema, target_schema
+  );
+
+  EXECUTE format('
+    UPDATE %I."geoIndicators" AS target
+    SET 
+      na_l1name = src.na_l1name,
+      na_l2name = src.na_l2name, 
+      us_l3name = src.us_l3name
+    FROM (
+      SELECT 
+        geo.us_l3name,
+        geo.na_l2name,
+        geo.na_l1name, 
+        dh."PrimaryKey"
+      FROM gis.ak_ecoregions AS geo
+      JOIN %I."dataHeader" AS dh
+      ON ST_WITHIN(dh.wkb_geometry, geo.geom)
+    ) AS src 
+    WHERE target."PrimaryKey" = src."PrimaryKey";', target_schema, target_schema
   );
   RETURN TRUE;
   ELSE
