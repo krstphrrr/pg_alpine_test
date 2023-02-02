@@ -9,8 +9,8 @@ BEGIN
   LOOP
     FOREACH _project_key IN ARRAY _project_keys
     LOOP
-      CALL public_test.util_project_key_drop(_schema_name, _table_name, _project_key);
+      PERFORM public_test.util_project_key_drop_ret(_schema_name, _table_name, _project_key);
     END LOOP;
   END LOOP;
 END
-
+$procedure$
