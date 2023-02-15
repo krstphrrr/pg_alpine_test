@@ -34,7 +34,7 @@ BEGIN
           dh."PrimaryKey"
         FROM gis.us_eco_level_4 AS geo 
         JOIN %I."dataHeader" AS dh 
-        ON ST_WITHIN(dh.wkb_geometry, geo.geom)
+        ON public.ST_WITHIN(dh.wkb_geometry, geo.geom)
     ) AS src
    WHERE target."PrimaryKey" = src."PrimaryKey";', target_schema, target_schema
   );
@@ -53,7 +53,7 @@ BEGIN
         dh."PrimaryKey"
       FROM gis.ak_ecoregions AS geo
       JOIN %I."dataHeader" AS dh
-      ON ST_WITHIN(dh.wkb_geometry, geo.geom)
+      ON public.ST_WITHIN(dh.wkb_geometry, geo.geom)
     ) AS src 
     WHERE target."PrimaryKey" = src."PrimaryKey";', target_schema, target_schema
   );

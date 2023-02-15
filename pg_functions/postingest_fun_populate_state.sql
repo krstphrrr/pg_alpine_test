@@ -25,7 +25,7 @@ BEGIN
           SELECT geo.stusps, dh."PrimaryKey"
           FROM gis.tl_2017_us_state_wgs84 as geo 
           JOIN %I."dataHeader" as dh 
-          ON ST_WITHIN(dh.wkb_geometry, geo.geom)
+          ON public.ST_WITHIN(dh.wkb_geometry, geo.geom)
       ) as src
       WHERE target."PrimaryKey" = src."PrimaryKey";', target_schema, target_schema
   );

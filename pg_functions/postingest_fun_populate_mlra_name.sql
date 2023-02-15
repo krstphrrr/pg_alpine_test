@@ -25,7 +25,7 @@ BEGIN
       SELECT geo.mlra_name, dh."PrimaryKey", geo.mlrarsym
       FROM gis.mlra_v42_wgs84 as geo 
       JOIN %I."dataHeader" as dh 
-      ON ST_WITHIN(dh.wkb_geometry, geo.geom)
+      ON public.ST_WITHIN(dh.wkb_geometry, geo.geom)
    ) as src
    WHERE target."PrimaryKey" = src."PrimaryKey";', target_schema, target_schema
   );
