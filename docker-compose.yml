@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     ports:
-     - 5432:5432
+     - 5433:5432
     volumes:
      - ./test_vol:/test_vol
      - pg_data:/var/lib/postgresql/data
@@ -16,6 +16,13 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8090:8080
+      
+  grafana:
+    image: grafana/grafana
+    restart: always
+    ports:
+      - 4000:3000
+
 volumes:
   pg_data:
