@@ -1,28 +1,59 @@
 version: '3'
 services:
 
-  db:
-    image: postgis/postgis:14-3.3-alpine
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: example
-    ports:
-     - 5433:5432
-    volumes:
-     - ./test_vol:/test_vol
-     - pg_data:/var/lib/postgresql/data
+  # db:
+  #   image: postgis/postgis:14-3.3-alpine
+  #   restart: always
+  #   environment:
+  #     POSTGRES_PASSWORD: example
+  #   ports:
+  #    - 5433:5432
+  #   volumes:
+  #    - ./test_vol:/test_vol
+  #    - pg_data:/var/lib/postgresql/data
+  #   networks:
+  #     - pg-network
 
-  adminer:
-    image: adminer
-    restart: always
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - cadvisor
+    networks:
+      - pg-network
+
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 8090:8080
-      
+    networks:
+      - pg-network
+    
+
   grafana:
     image: grafana/grafana
     restart: always
     ports:
       - 4000:3000
+    networks:
+      - pg-network
 
-volumes:
-  pg_data:
+networks:
+  pg-network:
+    external: true
+
+# volumes:
+#   pg_data:
