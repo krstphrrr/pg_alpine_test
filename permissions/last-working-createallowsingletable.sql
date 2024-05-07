@@ -1,3 +1,7 @@
+-- PROCEDURE: public_test.util_dynamic_createallow_singletable(text, text, text, text[])
+
+-- DROP PROCEDURE IF EXISTS public_test.util_dynamic_createallow_singletable(text, text, text, text[]);
+
 CREATE OR REPLACE PROCEDURE public_test.util_dynamic_createallow_singletable(
 	IN _schema_name text,
 	IN _role_name text,
@@ -15,12 +19,10 @@ DECLARE
   _NDOWSTR text;
   _NWERNSTR text;
   _BLMSTR text;
-  _DURPSTR text;
 
   _default_NDOW text;
   _default_NWERN text;
   _default_BLM text;
-  _default_DURP text;
   _default_NWERN_default text;
   _default_allowed text;
   _default_empty_permissions text;
@@ -38,21 +40,14 @@ BEGIN
   _default_BLM := E'("ProjectKey" ~~ \'BLM_AIM%%\'::text)';
   _default_NDOW := E'("ProjectKey" ~~* \'NDOW%%\'::text)';
   _default_NWERN := E'("ProjectKey" ~~* \'NWERN%%\'::text)';
-
--- ADDED 2024-05-07
-  _default_DURP := E'("ProjectKey" ~~* \'%%DURP%%\'::text)';
-
   _default_NWERN_default := E' OR (("DateVisited" < (CURRENT_DATE - \'3 years\'::interval year)) AND ("ProjectKey" ~~* \'NWERN%%\'::text))';
-  _default_allowed := E' OR ("ProjectKey" ~~* \'%%murv%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text)';
-  _default_empty_permissions := E' ("ProjectKey" ~~* \'%%murv%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text)';
+  _default_allowed := E' OR ("ProjectKey" ~~* \'Jornada%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text)';
+  _default_empty_permissions := E' ("ProjectKey" ~~* \'Jornada%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text)';
   -- assigning values that are used for policy name
   _default_perm_name := 'allow_';
   _NDOWSTR := 'nD';
   _NWERNSTR := 'nW';
   _BLMSTR := 'BL';
-
--- ADDED 2024-05-07
-  _DURPSTR := 'Du';
 -- 
   -- assigning values used for the dynamic part of the query
   _default_replacement := 'USING ((';
@@ -97,12 +92,7 @@ BEGIN
           _default_replacement := CONCAT(_default_replacement, _default_NWERN); 
         WHEN _perm ~~* 'blm' THEN 
           _default_perm_name := CONCAT(_default_perm_name, _BLMSTR);
-          _default_replacement := CONCAT(_default_replacement, _default_BLM);
-
-        -- ADDED 2024-05-07
-        WHEN _perm ~~* 'durp' THEN 
-        _default_perm_name := CONCAT(_default_perm_name, _DURPSTR);
-        _default_replacement := CONCAT(_default_replacement, _default_DURP); 
+          _default_replacement := CONCAT(_default_replacement, _default_BLM); 
 		  END CASE;
 	  ELSIF 
 		--  if persmission is neither on start of array or end of array
@@ -123,11 +113,6 @@ BEGIN
 			WHEN _perm ~~* 'blm' THEN 
 			_default_perm_name := CONCAT(_default_perm_name, _BLMSTR);
 			_default_replacement := CONCAT(_default_replacement, _default_BLM); 
-
-      -- ADDED 2024-05-07
-      WHEN _perm ~~* 'durp' THEN 
-      _default_perm_name := CONCAT(_default_perm_name, _DURPSTR);
-      _default_replacement := CONCAT(_default_replacement, _default_DURP); 
 		  END CASE;
 
 	  ELSIF 
@@ -148,12 +133,7 @@ BEGIN
 
 			WHEN _perm ~~* 'blm' THEN 
 			_default_perm_name := CONCAT(_default_perm_name, _BLMSTR);
-			_default_replacement := CONCAT(_default_replacement, _default_BLM);
-
-      -- ADDED 2024-05-07
-      WHEN _perm ~~* 'durp' THEN 
-      _default_perm_name := CONCAT(_default_perm_name, _DURPSTR);
-      _default_replacement := CONCAT(_default_replacement, _default_DURP); 
+			_default_replacement := CONCAT(_default_replacement, _default_BLM); 
 
 		  END CASE;
 		END IF;

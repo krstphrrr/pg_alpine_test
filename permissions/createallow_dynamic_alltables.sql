@@ -16,10 +16,13 @@ BEGIN
                     'dataHeight',
                     'dataHorizontalFlux',
                     'dataLPI',
+                    'dataPlotCharacterization',
+                    'dataSoilHorizons',
                     'dataSoilStability',
                     'dataSpeciesInventory',
                     'geoIndicators',
-                    'geoSpecies'
+                    'geoSpecies',
+                    'tblRHEM'
                   ];
   -- function that accepts rule, user, schema
   FOREACH _table_name IN ARRAY _table_names

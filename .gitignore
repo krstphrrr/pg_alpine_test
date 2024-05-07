@@ -3,3 +3,5 @@
 **/modisraster*.sql
 **/modisbackup
 test_vol/*
+**/*.txt
+**/0.yml
