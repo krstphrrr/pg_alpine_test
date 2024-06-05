@@ -12,12 +12,12 @@ DECLARE
   _default_end text;
   _perm text;
 
-  _NDOWSTR text;
+  _NDOWSTR text; -- deprecated
   _NWERNSTR text;
   _BLMSTR text;
   _DURPSTR text;
 
-  _default_NDOW text;
+  _default_NDOW text; -- deprecated
   _default_NWERN text;
   _default_BLM text;
   _default_DURP text;
@@ -36,15 +36,16 @@ BEGIN
     USING';
   -- assigning default values for permissions to keep logic clean
   _default_BLM := E'("ProjectKey" ~~ \'BLM_AIM%%\'::text)';
-  _default_NDOW := E'("ProjectKey" ~~* \'NDOW%%\'::text)';
+  _default_NDOW := E'("ProjectKey" ~~* \'NDOW%%\'::text)'; -- deprecated
   _default_NWERN := E'("ProjectKey" ~~* \'NWERN%%\'::text)';
 
 -- ADDED 2024-05-07
   _default_DURP := E'("ProjectKey" ~~* \'%%DURP%%\'::text)';
 
   _default_NWERN_default := E' OR (("DateVisited" < (CURRENT_DATE - \'3 years\'::interval year)) AND ("ProjectKey" ~~* \'NWERN%%\'::text))';
-  _default_allowed := E' OR ("ProjectKey" ~~* \'%%murv%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text)';
-  _default_empty_permissions := E' ("ProjectKey" ~~* \'%%murv%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text)';
+  -- ALTERED DEFAULTS ++NDOW 2024-06-04
+  _default_allowed := E' OR ("ProjectKey" ~~* \'%%murv%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text) OR ("ProjectKey" ~~* \'NDOW%%\'::text)';
+  _default_empty_permissions := E' ("ProjectKey" ~~* \'%%murv%%\'::text) OR ("ProjectKey" ~~* \'CRNG%%\'::text) OR ("ProjectKey" ~~* \'NDOW%%\'::text)';
   -- assigning values that are used for policy name
   _default_perm_name := 'allow_';
   _NDOWSTR := 'nD';
